@@ -16,6 +16,9 @@ var (
 
 func init() {
 	flag.Parse()
+	if *flagDaemon {
+		*flagInstall = false
+	}
 	if *flagInstall && os.Getuid() != 0 {
 		log.Fatal("You must install this program as root.")
 	}
