@@ -1,20 +1,20 @@
 # GoBSIPS (Go Binary Systemd-Integrated Proxy Server)
 
-GoBSIPS is a simple, single-file, static binary project that installs itself into Linux systemd and runs as a modern system service. It provides a SOCKS5 proxy server with basic authentication.
+GoBSIPS is a simple, single-file, static go binary that installs itself into Linux systemd and runs as a modern system service. It provides a SOCKS5 proxy server with basic authentication.
 
 ## Features
 
-- Single-file, static binary
-- Easy installation as a systemd service
+- Single-file, static binary. SCP it to your servers and run it
+- Easy permanent self-installation as a systemd service
 - SOCKS5 proxy server with authentication
 - Configurable through a simple configuration file
 
 ## Installation
 
-To install GoBSIPS, run the following command as root:
+To install GoBSIPS, run the following command:
 
 ```
-sudo ./gobsips -install
+sudo ./gobsips
 ```
 
 This will:
