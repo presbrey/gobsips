@@ -14,7 +14,7 @@ var (
 	flagInstall = flag.Bool("install", true, "Install the daemon (systemd service)")
 )
 
-func init() {
+func main() {
 	flag.Parse()
 	if *flagDaemon {
 		*flagInstall = false
@@ -22,9 +22,7 @@ func init() {
 	if *flagInstall && os.Getuid() != 0 {
 		log.Fatal("You must install this program as root.")
 	}
-}
 
-func main() {
 	switch {
 
 	case *flagInstall:

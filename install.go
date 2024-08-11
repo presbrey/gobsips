@@ -8,8 +8,9 @@ import (
 	"strings"
 )
 
-const (
-	serviceName = "gobsips.service"
+var (
+	pathMachineID = "/etc/machine-id"
+	serviceName   = "gobsips.service"
 )
 
 func installDefaultConfig() error {
@@ -69,7 +70,7 @@ func runCommand(name string, args ...string) error {
 }
 
 func getMachineID() string {
-	if data, err := os.ReadFile("/etc/machine-id"); err == nil {
+	if data, err := os.ReadFile(pathMachineID); err == nil {
 		return strings.TrimSpace(string(data))
 	}
 	return ""

@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-const (
+var (
 	configPath = "/etc/sysconfig/gobsips"
 )
 
