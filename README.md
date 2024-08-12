@@ -17,17 +17,18 @@ GoBSIPS is a simple, single-file, static go binary that installs itself into Lin
 
 ## Installation
 
-To install GoBSIPS, run the following command:
+Download a binary from GitHub here: https://github.com/presbrey/gobsips/releases/latest
 
+Then to install, copy the binary to the server and run it. We'll use Linux/AMD64 in this example:
 ```
-sudo mv gobsips /usr/local/bin
-sudo /usr/local/bin/gobsips
+scp gobsips_linux_amd64 root@remote-server:/usr/local/bin/gobsips
+ssh root@remote-server '/usr/local/bin/gobsips && cat /etc/sysconfig/gobsips'
 ```
 
-This will:
+`gobsips` will automatically:
 1. Create a default configuration file at `/etc/sysconfig/gobsips`
-2. Install a systemd service that runs to `/usr/local/bin/gobsips`
-3. Enable and start the service
+2. Install a systemd service that runs `/usr/local/bin/gobsips`
+3. Enable and start the service, and show you the initial configuration
 
 ## Configuration
 
@@ -52,6 +53,8 @@ Once installed and running, you can use GoBSIPS as a SOCKS5 proxy server. Config
 - Host: [Your server's IP address]
 - Port: 1080 (or the port you configured)
 - Username and Password: As configured in the config file
+
+If you run multiple servers and write golang software, this library may work well for you: https://github.com/presbrey/go-multiproxy
 
 ## Building from Source
 
