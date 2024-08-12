@@ -14,12 +14,13 @@ GoBSIPS is a simple, single-file, static go binary that installs itself into Lin
 To install GoBSIPS, run the following command:
 
 ```
-sudo ./gobsips
+sudo mv gobsips /usr/local/bin
+sudo /usr/local/bin/gobsips
 ```
 
 This will:
 1. Create a default configuration file at `/etc/sysconfig/gobsips`
-2. Install a systemd service file
+2. Install a systemd service that runs to `/usr/local/bin/gobsips`
 3. Enable and start the service
 
 ## Configuration
