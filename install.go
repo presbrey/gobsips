@@ -45,22 +45,18 @@ User=nobody
 WantedBy=multi-user.target
 `, exePath)
 
-	if err := os.WriteFile(systemdPath, []byte(serviceContent), 0644); err != nil {
+	if err = os.WriteFile(systemdPath, []byte(serviceContent), 0644); err != nil {
 		return err
 	}
 
 	// Enable and start the service
-	if err := runCommand("systemctl", "daemon-reload"); err != nil {
-		return err
-	}
-	if err := runCommand("systemctl", "enable", serviceName); err != nil {
-		return err
-	}
-	if err := runCommand("systemctl", "start", serviceName); err != nil {
-		return err
+	if err = runCommand("systemctl", "daemon-reload"); err == nil {
+		if err = runCommand("systemctl", "enable", serviceName); err == nil {
+			err = runCommand("systemctl", "start", serviceName)
+		}
 	}
 
-	return nil
+	return err
 }
 
 var run = func(cmd *exec.Cmd) error {

@@ -6,6 +6,8 @@ import (
 	"os/exec"
 	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestInstallDefaultConfig(t *testing.T) {
@@ -63,6 +65,9 @@ func TestGetMachineID(t *testing.T) {
 
 	// Replace the machine-id file path
 	oldMachineIDPath := "/etc/machine-id"
+	pathMachineID = "/"
+	assert.Equal(t, "", getMachineID())
+
 	pathMachineID = tempFile.Name()
 	defer func() { pathMachineID = oldMachineIDPath }()
 
@@ -75,6 +80,8 @@ func TestGetMachineID(t *testing.T) {
 }
 
 func TestInstallSystemdService(t *testing.T) {
+	assert.NoError(t, run(exec.Command("ls")))
+
 	// Create a temporary file for the systemd service
 	tempFile, err := os.CreateTemp("", "test_systemd_service")
 	if err != nil {

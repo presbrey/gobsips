@@ -61,13 +61,21 @@ func TestRun(t *testing.T) {
 	err = do()
 	assert.NoError(t, err)
 
+	var lastServer *socks5.Server
+	oldListenAndServe := listenAndServe
+	defer func() {
+		listenAndServe = oldListenAndServe
+	}()
 	*flagInstall = false
 	*flagDaemon = true
-	listenAndServe = func(_ *socks5.Server, network, addr string) error {
+	listenAndServe = func(server *socks5.Server, network, addr string) error {
+		lastServer = server
 		return fmt.Errorf("testing without starting server (%v:%v)", network, addr)
 	}
+	assert.Error(t, oldListenAndServe(lastServer, "", ""))
+
 	err = do()
-	assert.Error(t, err, "failed to start server: testing without starting server (tcp:0.0.0.0:1080)")
+	assert.Error(t, err)
 	listenAndServe = func(_ *socks5.Server, _, _ string) error {
 		return nil
 	}
