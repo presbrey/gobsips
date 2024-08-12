@@ -11,6 +11,7 @@ import (
 var (
 	pathMachineID = "/etc/machine-id"
 	serviceName   = "gobsips.service"
+	systemdPath   = "/etc/systemd/system/" + serviceName
 )
 
 func installDefaultConfig() error {
@@ -44,7 +45,7 @@ User=nobody
 WantedBy=multi-user.target
 `, exePath)
 
-	if err := os.WriteFile("/etc/systemd/system/"+serviceName, []byte(serviceContent), 0644); err != nil {
+	if err := os.WriteFile(systemdPath, []byte(serviceContent), 0644); err != nil {
 		return err
 	}
 
@@ -62,11 +63,15 @@ WantedBy=multi-user.target
 	return nil
 }
 
+var run = func(cmd *exec.Cmd) error {
+	return cmd.Run()
+}
+
 func runCommand(name string, args ...string) error {
 	cmd := exec.Command(name, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	return cmd.Run()
+	return run(cmd)
 }
 
 func getMachineID() string {

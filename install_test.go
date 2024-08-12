@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"os"
+	"os/exec"
+	"reflect"
 	"testing"
 )
 
@@ -68,6 +71,71 @@ func TestGetMachineID(t *testing.T) {
 
 	if result != testMachineID {
 		t.Errorf("Expected machine ID '%s', got '%s'", testMachineID, result)
+	}
+}
+
+func TestInstallSystemdService(t *testing.T) {
+	// Create a temporary file for the systemd service
+	tempFile, err := os.CreateTemp("", "test_systemd_service")
+	if err != nil {
+		t.Fatalf("Failed to create temp file: %v", err)
+	}
+	defer os.Remove(tempFile.Name())
+
+	// Replace the systemd service file path
+	oldSystemdPath := systemdPath
+	systemdPath = tempFile.Name()
+	defer func() { systemdPath = oldSystemdPath }()
+
+	// Create a slice to store command arguments
+	var commandArgs []string
+
+	// Replace runCommand with a test function
+	oldRun := run
+	run = func(cmd *exec.Cmd) error {
+		commandArgs = append(commandArgs, cmd.Args...)
+		return nil
+	}
+	defer func() { run = oldRun }()
+
+	// Run installSystemdService
+	if err := installSystemdService(); err != nil {
+		t.Fatalf("installSystemdService failed: %v", err)
+	}
+
+	// Read the contents of the temp file
+	content, err := os.ReadFile(tempFile.Name())
+	if err != nil {
+		t.Fatalf("Failed to read temp file: %v", err)
+	}
+
+	// Check the content of the systemd service file
+	expectedContent := fmt.Sprintf(`[Unit]
+Description=Go Binary Systemd-Integrated Proxy Server
+After=network.target
+
+[Service]
+ExecStart=%s -daemon
+Restart=always
+User=nobody
+
+[Install]
+WantedBy=multi-user.target
+`, os.Args[0])
+
+	if string(content) != expectedContent {
+		t.Errorf("Unexpected systemd service file content. Got:\n%s\nExpected:\n%s", string(content), expectedContent)
+	}
+
+	// Check the command arguments
+	expectedArgs := []string{
+		"systemctl", "daemon-reload",
+		"systemctl", "enable", serviceName,
+		"systemctl", "start", serviceName,
+	}
+
+	if !reflect.DeepEqual(commandArgs, expectedArgs) {
+		t.Errorf("Unexpected command arguments. Got: %v, Expected: %v", commandArgs, expectedArgs)
 	}
 }
 
