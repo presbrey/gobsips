@@ -1,3 +1,9 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/presbrey/gobsips)](https://goreportcard.com/report/github.com/presbrey/gobsips)
+[![codecov](https://codecov.io/gh/presbrey/gobsips/branch/main/graph/badge.svg)](https://codecov.io/gh/presbrey/gobsips)
+![Go Test](https://github.com/presbrey/gobsips/workflows/Go%20Test/badge.svg)
+[![GoDoc](https://godoc.org/github.com/presbrey/gobsips?status.svg)](https://godoc.org/github.com/presbrey/go-multiproxy)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 # GoBSIPS (Go Binary Systemd-Integrated Proxy Server)
 
 GoBSIPS is a simple, single-file, static go binary that installs itself into Linux systemd and runs as a modern system service. It provides a SOCKS5 proxy server with basic authentication.
